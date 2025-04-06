@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Marketplace with Advanced Features</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #6200ea;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .token-counter {
+      background: linear-gradient(135deg, #6200ea, #9e47ff);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+    .token-counter span {
+      font-size: 28px;
+      font-weight: bold;
+    }
+    button {
+      background: #ff6d00;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background: #ff8500;
+      transform: translateY(-2px);
+    }
+    button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 25px 0;
+    }
+    .model-card {
+      border: 1px solid #e0e0e0;
+      padding: 18px;
+      border-radius: 10px;
+      transition: all 0.3s;
+      background: white;
+    }
+    .model-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .model-card h3 {
+      margin: 0 0 5px 0;
+      color: #2d3748;
+    }
+    .model-card p {
+      margin: 5px 0;
+      color: #4a5568;
+    }
+    .model-card .price {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2d3748;
+      margin: 10px 0;
+    }
+    .original-price {
+      text-decoration: line-through;
+      color: #718096;
+      font-size: 14px;
+    }
+    .discount-badge {
+      background: #48bb78;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    .transaction-log {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+    #log {
+      max-height: 200px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .subscription-plans {
+      margin: 25px 0;
+      padding: 20px;
+      background: #f0f4ff;
+      border-radius: 10px;
+    }
+    .plans {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .plan {
+      flex: 1;
+      padding: 20px;
+      border: 1px solid #cbd5e0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: white;
+    }
+    .plan:hover {
+      border-color: #ff6d00;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .plan h4 {
+      margin: 0 0 5px 0;
+      color: #2d3748;
+    }
+    .model-battle {
+      margin: 25px 0;
+      padding: 20px;
+      background: #fff8f0;
+      border-radius: 10px;
+    }
+    .battle-card {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .battle-option {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      background: white;
+      transition: all 0.3s;
+    }
+    .battle-option:hover {
+      border-color: #ff6d00;
+    }
+    .battle-option.selected {
+      background: #ffedcc;
+      border-color: #ff6d00;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .token-update {
+      animation: pulse 0.5s;
+    }
+    .popularity {
+      display: inline-block;
+      margin-left: 10px;
+      color: #718096;
+      font-size: 14px;
+    }
+    .ad-button {
+      background: #4a5568;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🤖 AI Model Marketplace</h1>
+    
+    <!-- Token Counter -->
+    <div class="token-counter">
+      <div>
+        <span id="tokens">100</span> tokens
+      </div>
+      <div>
+        <button onclick="refillTokens()">🎁 Get +10 Tokens</button>
+        <button onclick="watchAd()" class="ad-button">📺 Watch Ad (+30)</button>
+      </div>
+    </div>
+    
+    <!-- Subscription Plans -->
+    <div class="subscription-plans">
+      <h3>💎 Subscription Plans</h3>
+      <div class="plans">
+        <div class="plan" onclick="buySubscription('basic')">
+          <h4>Basic</h4>
+          <p>+50 tokens/month</p>
+          <button>Free</button>
+        </div>
+        <div class="plan" onclick="buySubscription('pro')">
+          <h4>Pro</h4>
+          <p>+200 tokens/month</p>
+          <button>10 tokens</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Model Battle -->
+    <div class="model-battle">
+      <h3>⚔️ Model Battle</h3>
+      <p>Vote for the best model and boost its popularity!</p>
+      <div id="battle-container"></div>
+    </div>
+    
+    <!-- Model Listing -->
+    <h2>🛍️ Available Models</h2>
+    <div id="models" class="model-grid"></div>
+    
+    <!-- Transaction Log -->
+    <div class="transaction-log">
+      <h3>📜 Activity Log</h3>
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <script>
+    // Initial State
+    let state = {
+      tokens: 100,
+      models: [
+        {
+          id: 1,
+          name: "Stable Diffusion 3",
+          type: "Image Generator",
+          price: 15,
+          description: "Create stunning images from text prompts",
+          popularity: 42,
+          releaseDaysAgo: 5,
+          votes: 0
+        },
+        {
+          id: 2,
+          name: "GPT-4 Turbo",
+          type: "Text AI",
+          price: 25,
+          description: "Most advanced language model",
+          popularity: 78,
+          releaseDaysAgo: 30,
+          votes: 0
+        },
+        {
+          id: 3,
+          name: "Whisper v3",
+          type: "Speech Recognition",
+          price: 10,
+          description: "Transcribe audio with 95% accuracy",
+          popularity: 35,
+          releaseDaysAgo: 60,
+          votes: 0
+        }
+      ],
+      transactions: [],
+      lastLoginDate: null
+    };
+
+    // DOM Elements
+    const tokensEl = document.getElementById('tokens');
+    const modelsEl = document.getElementById('models');
+    const logEl = document.getElementById('log');
+    const battleContainer = document.getElementById('battle-container');
+
+    // Initialize Marketplace
+    function initMarketplace() {
+      checkDailyLogin();
+      renderModels();
+      startBattle();
+      addLog("🚀 Marketplace initialized!");
+    }
+
+    // Calculate Dynamic Price
+    function calculatePrice(basePrice, releaseDaysAgo) {
+      const discount = Math.min(50, releaseDaysAgo); // Max 50% discount
+      return Math.max(basePrice * 0.5, basePrice * (1 - discount/100));
+    }
+
+    // Render Models
+    function renderModels() {
+      modelsEl.innerHTML = state.models.map(model => {
+        const currentPrice = calculatePrice(model.price, model.releaseDaysAgo);
+        const discountPercent = Math.round((model.price - currentPrice) / model.price * 100);
+        
+        return `
+          <div class="model-card">
+            <h3>${model.name}</h3>
+            <p><em>${model.type}</em></p>
+            <p>${model.description}</p>
+            <div class="price">
+              💰 ${currentPrice.toFixed(0)} tokens
+              ${discountPercent > 0 ? 
+                `<span class="original-price">${model.price} tokens</span>
+                 <span class="discount-badge">${discountPercent}% OFF</span>` : ''}
+            </div>
+            <button 
+              onclick="buyModel(${model.id})" 
+              ${state.tokens < currentPrice ? 'disabled' : ''}
+            >
+              Buy Now
+            </button>
+            <span class="popularity">🔥 ${model.popularity} users</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Buy Model
+    function buyModel(modelId) {
+      const model = state.models.find(m => m.id === modelId);
+      const currentPrice = calculatePrice(model.price, model.releaseDaysAgo);
+      
+      if (state.tokens >= currentPrice) {
+        state.tokens -= currentPrice;
+        model.popularity += 1;
+        updateUI();
+        addLog(`✅ Purchased ${model.name} for ${currentPrice.toFixed(0)} tokens (original ${model.price})`);
+      } else {
+        addLog(`❌ Not enough tokens for ${model.name}!`);
+      }
+    }
+
+    // Subscription Plans
+    function buySubscription(plan) {
+      if (plan === 'pro' && state.tokens < 10) {
+        addLog("❌ Not enough tokens for Pro plan!");
+        return;
+      }
+
+      const reward = plan === 'basic' ? 50 : 200;
+      if (plan === 'pro') state.tokens -= 10;
+      
+      state.tokens += reward;
+      updateUI();
+      addLog(`🎉 Subscribed to ${plan.toUpperCase()} plan! +${reward} tokens`);
+    }
+
+    // Model Battle
+    function startBattle() {
+      const shuffled = [...state.models].sort(() => 0.5 - Math.random());
+      const contenders = shuffled.slice(0, 2);
+      
+      battleContainer.innerHTML = `
+        <div class="battle-card">
+          ${contenders.map(model => `
+            <div class="battle-option" onclick="voteForBattle(${model.id})">
+              <h4>${model.name}</h4>
+              <small>${model.type}</small>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function voteForBattle(modelId) {
+      const model = state.models.find(m => m.id === modelId);
+      model.votes += 1;
+      model.popularity += 5;
+      addLog(`🗳️ Voted for ${model.name}! +5 popularity`);
+      
+      // Visual feedback
+      document.querySelectorAll('.battle-option').forEach(el => el.classList.remove('selected'));
+      event.target.classList.add('selected');
+      
+      // Refresh battle after 2 seconds
+      setTimeout(startBattle, 2000);
+    }
+
+    // Token Refill
+    function refillTokens() {
+      state.tokens += 10;
+      updateUI();
+      addLog("🎁 +10 tokens added!");
+    }
+
+    // Watch Ad
+    function watchAd() {
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = "⏳ 30s remaining...";
+      
+      let seconds = 30;
+      const timer = setInterval(() => {
+        seconds--;
+        btn.textContent = `⏳ ${seconds}s remaining...`;
+        
+        if (seconds <= 0) {
+          clearInterval(timer);
+          state.tokens += 30;
+          updateUI();
+          addLog("📺 +30 tokens for watching ad!");
+          btn.textContent = "📺 Watch Ad (+30)";
+          btn.disabled = false;
+        }
+      }, 1000);
+    }
+
+    // Daily Login Bonus
+    function checkDailyLogin() {
+      const today = new Date().toDateString();
+      if (state.lastLoginDate !== today) {
+        state.tokens += 20;
+        addLog("🎉 Daily login bonus: +20 tokens!");
+        state.lastLoginDate = today;
+        updateUI();
+      }
+    }
+
+    // Update UI
+    function updateUI() {
+      tokensEl.textContent = state.tokens;
+      tokensEl.classList.add('token-update');
+      setTimeout(() => tokensEl.classList.remove('token-update'), 500);
+      renderModels();
+    }
+
+    // Add Log Entry
+    function addLog(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      logEl.innerHTML += `<p><small>[${timestamp}]</small> ${message}</p>`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // Start the app
+    initMarketplace();
+  </script>
+</body>
+</html>
